@@ -1,35 +1,71 @@
 /// <reference types ="cypress" />
 
-const { Student } = require('../../clases/student')
+const { defaultStudent } = require('../../clases/student');
 
 describe('Student Form', () => {
-  before(() => {
-    cy.visit('/automation-practice-form')
-    cy.viewport('iphone-x')
-  })
+	before(() => {
+		cy.visit('/automation-practice-form');
+		cy.viewport('iphone-x');
+	});
 
-  it('Complete form with all the information', () => {
-    const student = new Student(
-      'Nicolas',
-      'Salvaneschi',
-      'nikolassalvaneschi@gmail.com',
-      'Male',
-      '2494647318',
-      '21',
-      '2',
-      '1984',
-      'Math',
-      'Sports',
-      'Franklin 666',
-      'Rajasthan',
-      'Jaipur'
-    )
+	it('Complete form with all the information', () => {
+		cy.addStudent(defaultStudent);
 
-    cy.log(student)
+		cy.get('#example-modal-sizes-title-lg')
+			.contains('Thanks for submitting the form')
+			.should('be.visible');
 
-    cy.addStudent(student)
-  })
-})
+		cy.get('thead')
+			.first()
+			.within(() => {
+				cy.contains('Label').should('be.visible');
+				cy.contains('Values').should('be.visible');
+			});
+		cy.get('tbody').within(() => {
+			cy.get('tr')
+				.contains('Student Name')
+				.and('be.visible')
+				.next()
+				.should('have.text', `${defaultStudent.name + ' ' + defaultStudent.lastName}`);
+
+			cy.get('td')
+				.contains('Student Email')
+				.and('be.visible')
+				.next()
+				.and('have.text', `${defaultStudent.email}`);
+
+			cy.get('td')
+				.contains('Gender')
+				.and('be.visible')
+				.next()
+				.and('have.text', `${defaultStudent.gender}`);
+
+			cy.get('td')
+				.contains('Mobile')
+				.and('be.visible')
+				.next()
+				.and('have.text', `${defaultStudent.phone}`);
+
+			cy.get('td')
+				.contains('Date of Birth')
+				.and('be.visible')
+				.next()
+				.and('have.text', `${defaultStudent.day + ' ' + 'February' + ',' + defaultStudent.year}`);
+
+			cy.get('td')
+				.contains('Subjects')
+				.and('be.visible')
+				.next()
+				.and('have.text', `${defaultStudent.subjects[0] + ', ' + defaultStudent.subjects[1] + ', ' + defaultStudent.subjects[2]}`);
+
+			cy.get('td')
+				.contains('Hobbies')
+				.and('be.visible')
+				.next()
+				.and('have.text', `${defaultStudent.hobbies}`);
+		});
+	});
+});
 
 // Test case:
 //Cheking all elements (separado de funcionalidades)
