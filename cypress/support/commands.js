@@ -48,7 +48,7 @@ Cypress.Commands.add('addStudent', student => {
 			lastModified: Date.now()
 		});
 
-		cy.get('#currentAddress').type(student.adress); //add adress
+		cy.get('#currentAddress').type(student.address); //add address
 
 		//select state
 		cy.get('#state').type(student.state);
@@ -68,4 +68,29 @@ Cypress.Commands.add('addStudent', student => {
 	});
 
 	cy.get('form').submit(); // Submit a form
+});
+
+Cypress.Commands.add('parcialComplete', student => {
+	cy.get('form').within($form => {
+		cy.get('#firstName').should('be.visible');
+		cy.get('#firstName').type(student.name);
+
+		cy.get('#lastName').type(student.lastName);
+
+		cy.get('#userEmail').should('be.visible');
+		cy.get('#userEmail').type(student.email);
+
+		cy.get('[type="radio"]')
+			.first()
+			.check({ force: true });
+
+		cy.get('#userNumber').type(student.phone); //phone
+	});
+
+	cy.get('form').submit();
+});
+
+Cypress.Commands.add('invalidSubmit', () => {
+	cy.get('#submit').should('be.visible');
+	cy.log("THE DATA IS NOT ENOUGHT OR IT'S WRONG");
 });

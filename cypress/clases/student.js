@@ -14,10 +14,10 @@ export class Student {
 	year;
 	subjects;
 	hobbies;
-	adress;
+	address;
 	state;
 	city;
-	constructor({ name, lastName, email, gender, phone, day, month, year, subjects, hobbies, adress, state, city }) {
+	constructor({ name, lastName, email, gender, phone, day, month, year, subjects, hobbies, address, state, city }) {
 		this.name = name;
 		this.lastName = lastName;
 		this.email = email;
@@ -28,7 +28,7 @@ export class Student {
 		this.year = year;
 		this.subjects = subjects;
 		this.hobbies = hobbies;
-		this.adress = adress;
+		this.address = address;
 		this.state = state;
 		this.city = city;
 	}
@@ -48,7 +48,7 @@ export const defaultStudent = new Student({
 	//year:faker.random.year
 	subjects: ['Maths', 'Chemistry', 'English'],
 	hobbies: faker.random.numeric(1, { bannedDigits: ['4', '5', '6', '7', '8', '9'] }),
-	adress: faker.address.streetAddress(),
+	address: faker.address.streetAddress(),
 	state: 'Rajasthan',
 	city: 'Jaipur'
 });
