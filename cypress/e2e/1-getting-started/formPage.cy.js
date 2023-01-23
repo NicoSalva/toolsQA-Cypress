@@ -2,6 +2,8 @@
 
 const { defaultStudent } = require('../../clases/student');
 
+let resultHobbies = 'dale';
+
 describe('Student Form', () => {
 	before(() => {
 		cy.visit('/automation-practice-form');
@@ -58,15 +60,28 @@ describe('Student Form', () => {
 				.next()
 				.and('have.text', `${defaultStudent.subjects[0] + ', ' + defaultStudent.subjects[1] + ', ' + defaultStudent.subjects[2]}`);
 
+			resultHobbies = returnHobbiesName(defaultStudent); //convert my hobbie to text
+
 			cy.get('td')
 				.contains('Hobbies')
 				.and('be.visible')
 				.next()
-				.and('have.text', `${defaultStudent.hobbies}`);
+				.and('have.text', resultHobbies);
 		});
 	});
 });
 
+function returnHobbiesName(user) {
+	if (user.hobbies == '1') {
+		return 'Sports';
+	}
+	if (user.hobbies == '2') {
+		return 'Reading';
+	}
+	if (user.hobbies == '3') {
+		return 'Music';
+	}
+}
 // Test case:
 //Cheking all elements (separado de funcionalidades)
 

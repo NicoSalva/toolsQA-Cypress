@@ -41,10 +41,13 @@ export const defaultStudent = new Student({
 	gender: 'Male',
 	phone: faker.phone.number('##########'),
 	day: '21',
+	//day:faker.random.numeric
 	month: '2',
+	//month:faker.random.month({abbr:true})
 	year: '1984',
+	//year:faker.random.year
 	subjects: ['Maths', 'Chemistry', 'English'],
-	hobbies: 'Sports',
+	hobbies: faker.random.numeric(1, { bannedDigits: ['4', '5', '6', '7', '8', '9'] }),
 	adress: faker.address.streetAddress(),
 	state: 'Rajasthan',
 	city: 'Jaipur'

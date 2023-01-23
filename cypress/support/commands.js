@@ -39,10 +39,14 @@ Cypress.Commands.add('addStudent', student => {
 		cy.get('#subjectsInput')
 			.type(student.subjects[2])
 			.tab();
+		cy.get(`#${'hobbies-checkbox-' + student.hobbies}`).check({ force: true }); //Select hobbies
 
-		cy.get('[type="checkbox"]')
-			.first()
-			.check({ force: true });
+		cy.get('#uploadPicture').selectFile({
+			contents: Cypress.Buffer.from('/../fixture'),
+			fileName: 'picture.jpg',
+			mimeType: 'text/plain',
+			lastModified: Date.now()
+		});
 
 		cy.get('#currentAddress').type(student.adress); //add adress
 
