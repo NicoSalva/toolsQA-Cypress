@@ -1,8 +1,8 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
-	viewportWidth: 717,
-	viewportHeight: 916,
+	// viewportWidth: 717,
+	// viewportHeight: 916,
 	e2e: {
 		baseUrl: 'https://demoqa.com',
 		testIsolation: false,
@@ -11,6 +11,4 @@ module.exports = defineConfig({
 			// implement node event listeners here
 		}
 	}
-
-	//cy.viewport(360, 640);
 });

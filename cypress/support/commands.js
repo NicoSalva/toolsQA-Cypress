@@ -51,7 +51,9 @@ Cypress.Commands.add('addStudent', student => {
 		cy.get('#currentAddress').type(student.address); //add address
 
 		//select state
-		cy.get('#state').type(student.state);
+		cy.get('#state')
+			.click({ force: true })
+			.type(student.state);
 		cy.get('.css-1hwfws3').each(($e1, index, $list) => {
 			if ($e1.text() === 'Rajasthan') {
 				cy.tab();
@@ -94,3 +96,18 @@ Cypress.Commands.add('invalidSubmit', () => {
 	cy.get('#submit').should('be.visible');
 	cy.log("THE DATA IS NOT ENOUGHT OR IT'S WRONG");
 });
+
+// Cypress.Commands.add('closePublicity', element => {
+// 	cy.get('body').then($body => {
+// 		if ($body.find(element, { timeout: TIMEOUT_EXPLICIT }).length > 0) {
+// 			//evaluates as true if button exists at all
+// 			cy.get(element).then($header => {
+// 				if ($header.is(':visible')) {
+// 					cy.get(element).click();
+// 				}
+// 			});
+// 		} else {
+// 			assert.isOk('everything', 'everything is OK');
+// 		}
+// 	});
+// });

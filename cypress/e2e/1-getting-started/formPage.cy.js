@@ -5,7 +5,7 @@ const { defaultStudent } = require('../../clases/student');
 let resultHobbies = 'dale';
 
 describe('Student Form', () => {
-	before(() => {
+	beforeEach(() => {
 		cy.visit('/automation-practice-form');
 	});
 
@@ -175,7 +175,9 @@ describe('Student Form', () => {
 	it.only('5/ Complete form with a invalid Phone Number and validate the real structure', () => {
 		cy.get('form').within($form => {
 			//first name
-			cy.get('#firstName').type(defaultStudent.name);
+			cy.get('#firstName')
+				.click({ force: true })
+				.type(defaultStudent.name);
 			//last name
 			cy.get('#lastName').type(defaultStudent.lastName);
 			//gender
@@ -185,12 +187,33 @@ describe('Student Form', () => {
 			//phone
 			cy.get('#userEmail').type(defaultStudent.email);
 
-			//Complete mail with less of 10 numbers
+			//Complete phone with less of 10 numbers
 			cy.get('#userNumber').should('be.visible');
 			cy.get('#userNumber').type('123456789');
 		});
 		cy.invalidSubmit();
+		cy.get('#userNumber').clear();
+
+		//Complete phone with chars
+		cy.get('#userNumber').should('be.visible');
+		cy.get('#userNumber').type('aaaaaaaaaa');
+
+		cy.invalidSubmit();
+		cy.get('#userNumber').clear();
+
+		//Complete phone with 10 numbers
+		cy.get('#userNumber').should('be.visible');
+		cy.get('#userNumber').type(defaultStudent.phone);
+
+		cy.get('form').submit();
+
+		cy.get('#example-modal-sizes-title-lg')
+			.contains('Thanks for submitting the form')
+			.should('be.visible');
 	});
+
+	it.skip('', () => {
+		
 });
 
 function returnHobbiesName(user) {
@@ -207,13 +230,8 @@ function returnHobbiesName(user) {
 
 // Test case:
 //Cheking all elements (separado de funcionalidades)
-
 //Check the almost important elements
-// 1)Complete data with all the information
-// 2)Complete form without data (validate errors)
-//3) minimal requieres to complete form
-// 4/ Complete form with a inexist e-mail and validate the real email structure
-// 5/ Complete form with a invalid Phone Number and validate the real structure
+
 // The usar cannot complete email
 //All the elements are visible
 //Correct page
