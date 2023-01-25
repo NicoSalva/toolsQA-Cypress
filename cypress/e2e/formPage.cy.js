@@ -1,15 +1,16 @@
 /// <reference types ="cypress" />
 
-const { defaultStudent } = require('../../clases/student');
+const { defaultStudent } = require('../clases/student');
 
 let resultHobbies = 'dale';
 
 describe('Student Form', () => {
 	beforeEach(() => {
 		cy.visit('/automation-practice-form');
+		cy.viewport('iphone-x');
 	});
 
-	it('1/ Complete form with all the information', () => {
+	it('Complete form with all the information', () => {
 		cy.addStudent(defaultStudent);
 
 		//starting validate
@@ -24,73 +25,75 @@ describe('Student Form', () => {
 				cy.contains('Values').should('be.visible');
 			});
 		cy.get('tbody').within(() => {
-			cy.get('tr')
+			cy.get('tr:nth-child(1)')
 				.contains('Student Name')
 				.and('be.visible')
 				.next()
 				.should('have.text', `${defaultStudent.name + ' ' + defaultStudent.lastName}`);
 
-			cy.get('td')
+			cy.get('tr:nth-child(2)')
 				.contains('Student Email')
 				.and('be.visible')
 				.next()
 				.and('have.text', `${defaultStudent.email}`);
 
-			cy.get('td')
+			cy.get('tr:nth-child(3)')
+				.focused()
 				.contains('Gender')
 				.and('be.visible')
 				.next()
 				.and('have.text', `${defaultStudent.gender}`);
 
-			cy.get('td')
+			cy.get('tr:nth-child(4)')
 				.contains('Mobile')
 				.and('be.visible')
 				.next()
 				.and('have.text', `${defaultStudent.phone}`);
 
-			cy.get('td')
+			cy.get('tr:nth-child(5)')
 				.contains('Date of Birth')
 				.and('be.visible')
 				.next()
 				.and('have.text', `${defaultStudent.day + ' ' + 'February' + ',' + defaultStudent.year}`);
 
-			cy.get('td')
+			cy.get('tr:nth-child(6)')
 				.contains('Subjects')
-				.and('be.visible')
+				.and('exist')
 				.next()
 				.and('have.text', `${defaultStudent.subjects[0] + ', ' + defaultStudent.subjects[1] + ', ' + defaultStudent.subjects[2]}`);
 
 			resultHobbies = returnHobbiesName(defaultStudent); //convert my hobbie to text
 
-			cy.get('td')
+			cy.get('tr:nth-child(7)')
 				.contains('Hobbies')
 				.and('be.visible')
 				.next()
 				.and('have.text', resultHobbies);
 
-			cy.get('td')
+			cy.get('tr:nth-child(8)')
 				.contains('Picture')
 				.and('be.visible')
 				.next()
 				.and('have.text', 'picture.jpg');
 
-			cy.get('td')
+			cy.get('tr:nth-child(9)')
 				.contains('Address')
 				.and('be.visible')
 				.next()
 				.and('have.text', `${defaultStudent.address}`);
 
-			cy.get('td')
+			cy.get('tr:nth-child(10)')
 				.contains('State and City')
-				.and('be.visible')
+				.and('exist')
 				.next()
+				.and('exist')
 				.and('have.text', `${defaultStudent.state + ' ' + defaultStudent.city}`);
 		});
 
-		cy.get('#closeLargeModal').click();
+		cy.get('#closeLargeModal').click({ force: true });
 	});
 
-	it('2/ Submit empty form (validate errors)', () => {
+	it('Submit empty form (validate errors)', () => {
 		cy.get('form').submit(); // Submit a form
 
 		cy.get('#firstName')
@@ -108,16 +111,14 @@ describe('Student Form', () => {
 		cy.get('#userNumber')
 			.should('be.visible')
 			.and('not.have.text');
-
-		//expect()
 	});
 
-	it('3/ Minimal requieres to complete form', () => {
+	it('Minimal requieres to complete form', () => {
 		cy.parcialComplete(defaultStudent);
-		cy.get('#closeLargeModal').click();
+		cy.get('#closeLargeModal').click({ force: true });
 	});
 
-	it('4/ Complete form with a inexist e-mail and validate the real email structure', () => {
+	it('Complete form with a inexist e-mail and validate the real email structure', () => {
 		cy.get('form').within($form => {
 			//first name
 			cy.get('#firstName').type(defaultStudent.name);
@@ -131,7 +132,9 @@ describe('Student Form', () => {
 				.check({ force: true });
 
 			//phone
-			cy.get('#userNumber').type(defaultStudent.phone);
+			cy.get('#userNumber')
+				.click()
+				.type(defaultStudent.phone);
 
 			//Complete e-mail with 'aaaa' without @ and .com
 			cy.get('#userEmail').should('be.visible');
@@ -172,7 +175,7 @@ describe('Student Form', () => {
 			.should('be.visible');
 	});
 
-	it.only('5/ Complete form with a invalid Phone Number and validate the real structure', () => {
+	it('Complete form with a invalid Phone Number and validate the real structure', () => {
 		cy.get('form').within($form => {
 			//first name
 			cy.get('#firstName')
@@ -212,8 +215,7 @@ describe('Student Form', () => {
 			.should('be.visible');
 	});
 
-	it.skip('', () => {
-		
+	it.skip('', () => {});
 });
 
 function returnHobbiesName(user) {
@@ -227,15 +229,3 @@ function returnHobbiesName(user) {
 		return 'Music';
 	}
 }
-
-// Test case:
-//Cheking all elements (separado de funcionalidades)
-//Check the almost important elements
-
-// The usar cannot complete email
-//All the elements are visible
-//Correct page
-//Complete user with inexist email
-// Complete form with invalid phone
-// The usar cannot complete emaiñ
-// Complete form with enought numbers

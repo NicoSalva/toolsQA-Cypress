@@ -1,17 +1,18 @@
 {
-  "name": "toolsqa-cypress",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
-    "cypress": "^12.3.0",
-    "cypress-plugin-tab": "^1.0.5"
-  }
+	"name": "toolsqa-cypress",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"cy:run:chrome": "cypress run -b chrome"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@faker-js/faker": "^7.6.0",
+		"cypress": "^12.3.0",
+		"cypress-plugin-tab": "^1.0.5",
+		"mochawesome": "^7.1.3"
+	}
 }

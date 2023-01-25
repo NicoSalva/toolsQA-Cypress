@@ -1,0 +1,201 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 6,
+    "passes": 4,
+    "pending": 1,
+    "failures": 1,
+    "start": "2023-01-25T19:07:43.015Z",
+    "end": "2023-01-25T19:08:05.474Z",
+    "duration": 22459,
+    "testsRegistered": 6,
+    "passPercent": 80,
+    "pendingPercent": 16.666666666666664,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "f6a9821c-0938-4411-a8d4-f4051186721b",
+      "title": "",
+      "fullFile": "cypress/e2e/formPage.cy.js",
+      "file": "cypress/e2e/formPage.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+          "title": "Student Form",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Complete form with all the information",
+              "fullTitle": "Student Form Complete form with all the information",
+              "timedOut": null,
+              "duration": 12901,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.addStudent(defaultStudent);\n//starting validate\ncy.get('#example-modal-sizes-title-lg').contains('Thanks for submitting the form').should('be.visible');\ncy.get('thead').first().within(() => {\n  cy.contains('Label').should('be.visible');\n  cy.contains('Values').should('be.visible');\n});\ncy.get('tbody').within(() => {\n  cy.get('tr:nth-child(1)').contains('Student Name').and('be.visible').next().should('have.text', `${defaultStudent.name + ' ' + defaultStudent.lastName}`);\n  cy.get('tr:nth-child(2)').contains('Student Email').and('be.visible').next().and('have.text', `${defaultStudent.email}`);\n  cy.get('tr:nth-child(3)').focused().contains('Gender').and('be.visible').next().and('have.text', `${defaultStudent.gender}`);\n  cy.get('tr:nth-child(4)').contains('Mobile').and('be.visible').next().and('have.text', `${defaultStudent.phone}`);\n  cy.get('tr:nth-child(5)').contains('Date of Birth').and('be.visible').next().and('have.text', `${defaultStudent.day + ' ' + 'February' + ',' + defaultStudent.year}`);\n  cy.get('tr:nth-child(6)').contains('Subjects').and('exist').next().and('have.text', `${defaultStudent.subjects[0] + ', ' + defaultStudent.subjects[1] + ', ' + defaultStudent.subjects[2]}`);\n  resultHobbies = returnHobbiesName(defaultStudent); //convert my hobbie to text\n  cy.get('tr:nth-child(7)').contains('Hobbies').and('be.visible').next().and('have.text', resultHobbies);\n  cy.get('tr:nth-child(8)').contains('Picture').and('be.visible').next().and('have.text', 'picture.jpg');\n  cy.get('tr:nth-child(9)').contains('Address').and('be.visible').next().and('have.text', `${defaultStudent.address}`);\n  cy.get('tr:nth-child(10)').contains('State and City').and('exist').next().and('exist').and('have.text', `${defaultStudent.state + ' ' + defaultStudent.city}`);\n});\ncy.get('#closeLargeModal').click({\n  force: true\n});",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Not enough elements found. Found '2', expected '3'.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Not enough elements found. Found '2', expected '3'.\n    at Context.eval (webpack:///./cypress/support/commands.js:51:26)",
+                "diff": "- 2\n+ 3\n"
+              },
+              "uuid": "049d0d87-6b89-41d4-8173-8ddba8845ae4",
+              "parentUUID": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Submit empty form (validate errors)",
+              "fullTitle": "Student Form Submit empty form (validate errors)",
+              "timedOut": null,
+              "duration": 1177,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('form').submit(); // Submit a form\ncy.get('#firstName').should('be.visible').and('not.have.text');\ncy.get('#lastName').should('be.visible').and('not.have.text');\ncy.get('#gender-radio-1').should('not.be.checked');\ncy.get('#gender-radio-2').should('not.be.checked');\ncy.get('#gender-radio-3').should('not.be.checked');\ncy.get('#userNumber').should('be.visible').and('not.have.text');",
+              "err": {},
+              "uuid": "198be8eb-20f2-4e9a-b5fb-2aee5dc6fbdf",
+              "parentUUID": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Minimal requieres to complete form",
+              "fullTitle": "Student Form Minimal requieres to complete form",
+              "timedOut": null,
+              "duration": 2509,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.parcialComplete(defaultStudent);\ncy.get('#closeLargeModal').click({\n  force: true\n});",
+              "err": {},
+              "uuid": "d7000c68-b9f4-4013-9f91-15c057c60a68",
+              "parentUUID": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Complete form with a inexist e-mail and validate the real email structure",
+              "fullTitle": "Student Form Complete form with a inexist e-mail and validate the real email structure",
+              "timedOut": null,
+              "duration": 3082,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('form').within($form => {\n  //first name\n  cy.get('#firstName').type(defaultStudent.name);\n  //last name\n  cy.get('#lastName').type(defaultStudent.lastName);\n  //gender\n  cy.get('[type=\"radio\"]').first().check({\n    force: true\n  });\n  //phone\n  cy.get('#userNumber').click().type(defaultStudent.phone);\n  //Complete e-mail with 'aaaa' without @ and .com\n  cy.get('#userEmail').should('be.visible');\n  cy.get('#userEmail').type('aaaa');\n});\ncy.invalidSubmit();\ncy.get('#userEmail').should('be.visible');\n//Complete mail with '1111' (without name and .com)\ncy.get('#userEmail').clear().type('111');\ncy.invalidSubmit();\ncy.get('#userEmail').should('be.visible');\ncy.get('#userEmail').clear();\n//Complete e-mail with @a.com (without name)\ncy.get('#userEmail').type('@a.com');\ncy.invalidSubmit();\n///Complete e-mail with a@a.com (correct structure)\ncy.get('#userEmail').clear().type('a@a.com');\ncy.get('#userEmail').clear();\ncy.get('#userEmail').should('be.visible');\ncy.get('#userEmail').type('a@a.com');\ncy.get('form').submit();\ncy.get('#example-modal-sizes-title-lg').contains('Thanks for submitting the form').should('be.visible');",
+              "err": {},
+              "uuid": "b6c3da7a-936d-4658-badc-6e8b7e7453a0",
+              "parentUUID": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Complete form with a invalid Phone Number and validate the real structure",
+              "fullTitle": "Student Form Complete form with a invalid Phone Number and validate the real structure",
+              "timedOut": null,
+              "duration": 2716,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('form').within($form => {\n  //first name\n  cy.get('#firstName').click({\n    force: true\n  }).type(defaultStudent.name);\n  //last name\n  cy.get('#lastName').type(defaultStudent.lastName);\n  //gender\n  cy.get('[type=\"radio\"]').first().check({\n    force: true\n  });\n  //phone\n  cy.get('#userEmail').type(defaultStudent.email);\n  //Complete phone with less of 10 numbers\n  cy.get('#userNumber').should('be.visible');\n  cy.get('#userNumber').type('123456789');\n});\ncy.invalidSubmit();\ncy.get('#userNumber').clear();\n//Complete phone with chars\ncy.get('#userNumber').should('be.visible');\ncy.get('#userNumber').type('aaaaaaaaaa');\ncy.invalidSubmit();\ncy.get('#userNumber').clear();\n//Complete phone with 10 numbers\ncy.get('#userNumber').should('be.visible');\ncy.get('#userNumber').type(defaultStudent.phone);\ncy.get('form').submit();\ncy.get('#example-modal-sizes-title-lg').contains('Thanks for submitting the form').should('be.visible');",
+              "err": {},
+              "uuid": "b23f2806-3dcf-427e-904b-cdbcfd9910c3",
+              "parentUUID": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "",
+              "fullTitle": "Student Form ",
+              "timedOut": null,
+              "duration": 0,
+              "state": "pending",
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": true,
+              "context": null,
+              "code": "",
+              "err": {},
+              "uuid": "b4b81024-ecf3-41e9-90a0-c3a527fa465f",
+              "parentUUID": "09625756-9d3b-465f-b7cb-a07d8edf9dcb",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "198be8eb-20f2-4e9a-b5fb-2aee5dc6fbdf",
+            "d7000c68-b9f4-4013-9f91-15c057c60a68",
+            "b6c3da7a-936d-4658-badc-6e8b7e7453a0",
+            "b23f2806-3dcf-427e-904b-cdbcfd9910c3"
+          ],
+          "failures": [
+            "049d0d87-6b89-41d4-8173-8ddba8845ae4"
+          ],
+          "pending": [
+            "b4b81024-ecf3-41e9-90a0-c3a527fa465f"
+          ],
+          "skipped": [],
+          "duration": 22385,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": null,
+      "version": "6.2.0"
+    }
+  }
+}

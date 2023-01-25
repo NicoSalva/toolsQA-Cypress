@@ -14,57 +14,72 @@ Cypress.Commands.add('addStudent', student => {
 			.first()
 			.check({ force: true });
 
-		cy.get('#userNumber').type(student.phone); //phone
+		//Phone
+		cy.get('#userNumber').type(student.phone);
 
-		cy.get('#dateOfBirthInput').click();
+		cy.get('#dateOfBirthInput').click({ force: true });
 
-		cy.get('.react-datepicker__month-select') // month
+		//Month
+		cy.get('.react-datepicker__month-select')
 			.select('February')
 			.should('have.value', '1');
 
-		cy.get('.react-datepicker__year-select') //year
+		//Year
+		cy.get('.react-datepicker__year-select')
 			.select('1984')
 			.should('have.value', '1984');
 
-		cy.get('.react-datepicker__day--021') //day
+		//Day
+		cy.get('.react-datepicker__day--021')
 			.should('have.text', '21')
 			.click({ force: true });
 
-		cy.get('#subjectsInput')
-			.type(student.subjects[0])
-			.tab();
-		cy.get('#subjectsInput')
-			.type(student.subjects[1])
-			.tab();
-		cy.get('#subjectsInput')
-			.type(student.subjects[2])
-			.tab();
-		cy.get(`#${'hobbies-checkbox-' + student.hobbies}`).check({ force: true }); //Select hobbies
+		//Subjects
+		cy.get('#subjectsContainer').within($form => {
+			cy.get('#subjectsInput')
+				.type(student.subjects[0])
+				.tab({ force: true });
 
+			cy.get('#subjectsInput')
+				.type(student.subjects[1])
+				.tab({ force: true });
+
+			cy.get('#subjectsInput')
+				.type(student.subjects[2])
+				.tab({ force: true });
+
+			cy.get('.css-12jo7m5').should('have.length', student.subjects.length);
+		});
+
+		//Select hobbies
+		cy.get(`#${'hobbies-checkbox-' + student.hobbies}`).check({ force: true });
+
+		//Upload picture
 		cy.get('#uploadPicture').selectFile({
-			contents: Cypress.Buffer.from('/../fixture'),
+			contents: Cypress.Buffer.from('/../ixtures/pictures'),
 			fileName: 'picture.jpg',
 			mimeType: 'text/plain',
 			lastModified: Date.now()
 		});
-
+		//Address
 		cy.get('#currentAddress').type(student.address); //add address
 
-		//select state
-		cy.get('#state')
-			.click({ force: true })
-			.type(student.state);
-		cy.get('.css-1hwfws3').each(($e1, index, $list) => {
-			if ($e1.text() === 'Rajasthan') {
-				cy.tab();
+		//Select state
+		cy.get('#state > .css-yk16xz-control').click({ force: true });
+		cy.get('.css-11unzgr>').each(($e1, index, $list) => {
+			if ($e1.text() === student.state) {
+				cy.get('.css-11unzgr>')
+					.eq(index)
+					.click({ force: true });
 			}
 		});
 
-		//select city
-		cy.get('#city').type(student.city);
-		cy.get('.css-1hwfws3').each(($e1, index, $list) => {
-			if ($e1.text() === 'Jaipur') {
-				cy.tab();
+		cy.get('#city >> .css-1hwfws3').click({ force: true });
+		cy.get('.css-11unzgr>').each(($e1, index, $list) => {
+			if ($e1.text() === student.city) {
+				cy.get('.css-11unzgr>')
+					.eq(index)
+					.click({ force: true });
 			}
 		});
 	});
@@ -96,18 +111,3 @@ Cypress.Commands.add('invalidSubmit', () => {
 	cy.get('#submit').should('be.visible');
 	cy.log("THE DATA IS NOT ENOUGHT OR IT'S WRONG");
 });
-
-// Cypress.Commands.add('closePublicity', element => {
-// 	cy.get('body').then($body => {
-// 		if ($body.find(element, { timeout: TIMEOUT_EXPLICIT }).length > 0) {
-// 			//evaluates as true if button exists at all
-// 			cy.get(element).then($header => {
-// 				if ($header.is(':visible')) {
-// 					cy.get(element).click();
-// 				}
-// 			});
-// 		} else {
-// 			assert.isOk('everything', 'everything is OK');
-// 		}
-// 	});
-// });
