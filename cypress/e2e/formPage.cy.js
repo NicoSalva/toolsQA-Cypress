@@ -1,6 +1,12 @@
 /// <reference types ="cypress" />
 
+const { faker } = require('@faker-js/faker');
 const { defaultStudent } = require('../clases/student');
+
+const today = '27';
+
+const years = '2023';
+const farFarYear = '2035';
 
 let resultHobbies = 'dale';
 
@@ -62,8 +68,7 @@ describe('Student Form', () => {
 				.next()
 				.and('have.text', `${defaultStudent.subjects[0] + ', ' + defaultStudent.subjects[1] + ', ' + defaultStudent.subjects[2]}`);
 
-			resultHobbies = returnHobbiesName(defaultStudent); //convert my hobbie to text
-
+			resultHobbies = returnHobbiesName(defaultStudent);
 			cy.get('tr:nth-child(7)')
 				.contains('Hobbies')
 				.and('be.visible')
@@ -215,8 +220,82 @@ describe('Student Form', () => {
 			.should('be.visible');
 	});
 
-	it.skip('', () => {});
+	it('Complete with invalid type picture (mp3)', () => {
+		cy.get('#uploadPicture').selectFile({
+			contents: Cypress.Buffer.from('/../ixtures/pictures'),
+			fileName: 'file.mp3',
+			lastModified: Date.now()
+		});
+
+		cy.parcialComplete(defaultStudent);
+
+		cy.get('tr:nth-child(8) > :nth-child(1)')
+			.contains('Picture')
+			.and('be.visible')
+			.next()
+			.and('have.text', 'file.mp3');
+	});
+
+	it('Complete with an user does born today', () => {
+		cy.get('form').within($form => {
+			cy.get('#dateOfBirthInput').click({ force: true });
+			//Year
+			cy.get('.react-datepicker__year-select')
+				.select(years)
+				.should('have.value', years);
+
+			//Day
+			cy.get(`.${'react-datepicker__day--' + '0' + today}`)
+				.should('have.text', today)
+				.click({ force: true });
+		});
+
+		cy.parcialComplete(defaultStudent);
+
+		cy.get('#example-modal-sizes-title-lg')
+			.contains('Thanks for submitting the form')
+			.should('be.visible');
+
+		cy.get('tr:nth-child(5)')
+			.contains('Date of Birth')
+			.and('be.visible')
+			.next()
+			.and('have.text', `${today + ' ' + 'January' + ',' + years}`);
+	});
+
+	it("Complete with an user dosen't born", () => {
+		cy.get('form').within($form => {
+			cy.get('#dateOfBirthInput').click({ force: true });
+			//Year
+			cy.get('.react-datepicker__year-select')
+				.select(farFarYear)
+				.should('have.value', farFarYear);
+
+			//Day
+			cy.get(`.${'react-datepicker__day--' + '0' + today}`)
+				.should('have.text', today)
+				.click({ force: true });
+		});
+
+		cy.parcialComplete(defaultStudent);
+
+		cy.get('#example-modal-sizes-title-lg')
+			.contains('Thanks for submitting the form')
+			.should('be.visible');
+
+		cy.get('tr:nth-child(5)')
+			.contains('Date of Birth')
+			.and('be.visible')
+			.next()
+			.and('have.text', `${today + ' ' + 'January' + ',' + farFarYear}`);
+	});
 });
+
+//Validar nombres demas elementos
+
+//Validar subir cualquier tipo de archivo
+
+//Validar subir un archivo muy pesado
 
 function returnHobbiesName(user) {
 	if (user.hobbies == '1') {
