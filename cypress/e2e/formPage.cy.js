@@ -1,6 +1,6 @@
 /// <reference types ="cypress" />
 
-const { defaultStudent } = require('../clases/student');
+const { defaultStudent } = require('../classes/student');
 
 // This constants are declaret to modifed the defaultStudent
 const today = '27';
@@ -15,7 +15,7 @@ describe('Student Form', () => {
 		cy.visit('/automation-practice-form');
 	});
 
-	it.only('Complete form with all the information', () => {
+	it('Complete form with all the information', () => {
 		cy.addStudent(defaultStudent);
 
 		// Asserts
