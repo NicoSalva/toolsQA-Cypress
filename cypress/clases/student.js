@@ -1,8 +1,5 @@
 import { faker } from '@faker-js/faker';
 
-const randomName = faker.name.fullName(); // Rowan Nikolaus
-const randomEmail = faker.internet.email(); // Kassandra.Haley@erich.biz
-
 export class Student {
 	name;
 	lastName;
@@ -33,13 +30,24 @@ export class Student {
 		this.city = city;
 	}
 
-	getMonth(Student) {
+	getMonth() {
 		if (this.month == '2') {
 			return 'February';
 		}
 
 		if (this.month == '1') {
 			return 'January';
+		}
+	}
+	returnHobbiesName() {
+		if (this.hobbies == '1') {
+			return 'Sports';
+		}
+		if (this.hobbies == '2') {
+			return 'Reading';
+		}
+		if (this.hobbies == '3') {
+			return 'Music';
 		}
 	}
 }

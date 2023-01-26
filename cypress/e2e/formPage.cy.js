@@ -1,26 +1,24 @@
 /// <reference types ="cypress" />
 
-const { faker } = require('@faker-js/faker');
-const { should } = require('chai');
 const { defaultStudent } = require('../clases/student');
 
+// This constants are declaret to modifed the defaultStudent
 const today = '27';
 const thisMonth = '1';
 const thisYear = '2023';
 const farFarYear = '2035';
 
-let resultHobbies = 'dale';
+let resultHobbies = '';
 
 describe('Student Form', () => {
 	beforeEach(() => {
 		cy.visit('/automation-practice-form');
-		cy.viewport('iphone-x');
 	});
 
-	it.only('1/ Complete form with all the information', () => {
+	it.only('Complete form with all the information', () => {
 		cy.addStudent(defaultStudent);
 
-		//starting validate
+		// Asserts
 		cy.get('#example-modal-sizes-title-lg')
 			.contains('Thanks for submitting the form')
 			.should('be.visible');
@@ -69,7 +67,7 @@ describe('Student Form', () => {
 				.next()
 				.and('have.text', `${defaultStudent.subjects[0] + ', ' + defaultStudent.subjects[1] + ', ' + defaultStudent.subjects[2]}`);
 
-			resultHobbies = returnHobbiesName(defaultStudent);
+			resultHobbies = defaultStudent.returnHobbiesName();
 			cy.get('tr:nth-child(7)')
 				.contains('Hobbies')
 				.and('be.visible')
@@ -99,9 +97,11 @@ describe('Student Form', () => {
 		cy.get('#closeLargeModal').click({ force: true });
 	});
 
-	it('2/ Submit empty form (validate errors)', () => {
-		cy.get('form').submit(); // Submit a form
+	it('Submit empty form (validate errors)', () => {
+		// Submit a form
+		cy.get('form').submit();
 
+		// Asserts
 		cy.get('#firstName')
 			.should('be.visible')
 			.and('not.have.text');
@@ -119,10 +119,12 @@ describe('Student Form', () => {
 			.and('not.have.text');
 	});
 
-	it('3/ Complete only with required data', () => {
+	it('Complete only with required data', () => {
 		cy.parcialAddStudent(defaultStudent);
-		cy.get('form').submit(); // Submit a form
-		//starting validate
+		// Submit a form
+		cy.get('form').submit();
+
+		// Aasserts
 		cy.get('#example-modal-sizes-title-lg')
 			.contains('Thanks for submitting the form')
 			.should('be.visible');
@@ -133,6 +135,7 @@ describe('Student Form', () => {
 				cy.contains('Label').should('be.visible');
 				cy.contains('Values').should('be.visible');
 			});
+
 		cy.get('tbody').within(() => {
 			cy.get('tr:nth-child(1)')
 				.contains('Student Name')
@@ -160,28 +163,29 @@ describe('Student Form', () => {
 				.and('have.text', `${defaultStudent.phone}`);
 		});
 
+		// Close panel
 		cy.get('#closeLargeModal').click({ force: true });
 	});
 
-	it('4/ Complete with a nonexistent e-mail and validate the real email structure', () => {
+	it('Complete with a nonexistent e-mail and validate the real email structure', () => {
 		cy.get('form').within($form => {
-			//first name
+			// First name
 			cy.get('#firstName').type(defaultStudent.name);
 
-			//last name
+			// Last name
 			cy.get('#lastName').type(defaultStudent.lastName);
 
-			//gender
+			// Gender
 			cy.get('[type="radio"]')
 				.first()
 				.check({ force: true });
 
-			//phone
+			// Phone
 			cy.get('#userNumber')
 				.click()
 				.type(defaultStudent.phone);
 
-			//Complete e-mail with 'aaaa' without @ and .com
+			// Complete e-mail with 'aaaa' without @ and .com
 			cy.get('#userEmail').should('be.visible');
 			cy.get('#userEmail').type('aaaa');
 		});
@@ -189,7 +193,7 @@ describe('Student Form', () => {
 
 		cy.get('#userEmail').should('be.visible');
 
-		//Complete mail with '1111' (without name and .com)
+		// Complete mail with '1111' (without name and .com)
 		cy.get('#userEmail')
 			.clear()
 			.type('111');
@@ -199,57 +203,56 @@ describe('Student Form', () => {
 
 		cy.get('#userEmail').clear();
 
-		//Complete e-mail with @a.com (without name)
+		// Complete e-mail with @a.com (without name)
 		cy.get('#userEmail').type('@a.com');
 
 		cy.invalidSubmit();
-		///Complete e-mail with a@a.com (correct structure)
+		/// Complete e-mail with a@a.com (correct)
 		cy.get('#userEmail')
 			.clear()
 			.type('a@a.com');
 
-		cy.get('#userEmail').clear();
-
-		cy.get('#userEmail').should('be.visible');
-		cy.get('#userEmail').type('a@a.com');
-
+		// Submit
 		cy.get('form').submit();
 
 		cy.get('#example-modal-sizes-title-lg')
 			.contains('Thanks for submitting the form')
 			.should('be.visible');
+
+		// Close panel
+		cy.get('#closeLargeModal').click({ force: true });
 	});
 
-	it('5/ Complete form with a invalid Phone Number and validate the real structure', () => {
+	it('Complete form with a invalid Phone Number and validate the real structure', () => {
 		cy.get('form').within($form => {
-			//first name
+			// First name
 			cy.get('#firstName')
 				.click({ force: true })
 				.type(defaultStudent.name);
-			//last name
+			// Last name
 			cy.get('#lastName').type(defaultStudent.lastName);
-			//gender
+			// Gender
 			cy.get('[type="radio"]')
 				.first()
 				.check({ force: true });
-			//phone
+			// Phone
 			cy.get('#userEmail').type(defaultStudent.email);
 
-			//Complete phone with less of 10 numbers
+			// Complete phone with less of 10 numbers
 			cy.get('#userNumber').should('be.visible');
 			cy.get('#userNumber').type('123456789');
 		});
 		cy.invalidSubmit();
 		cy.get('#userNumber').clear();
 
-		//Complete phone with chars
+		// Complete phone with chars
 		cy.get('#userNumber').should('be.visible');
 		cy.get('#userNumber').type('aaaaaaaaaa');
 
 		cy.invalidSubmit();
 		cy.get('#userNumber').clear();
 
-		//Complete phone with 10 numbers
+		// Complete phone with 10 numbers
 		cy.get('#userNumber').should('be.visible');
 		cy.get('#userNumber').type(defaultStudent.phone);
 
@@ -258,9 +261,13 @@ describe('Student Form', () => {
 		cy.get('#example-modal-sizes-title-lg')
 			.contains('Thanks for submitting the form')
 			.should('be.visible');
+
+		// Close panel
+		cy.get('#closeLargeModal').click({ force: true });
 	});
 
-	it('6/ Complete with invalid type picture (mp3)', () => {
+	it('Complete with invalid type picture (mp3)', () => {
+		// Select mp3 file
 		cy.get('#uploadPicture').selectFile({
 			contents: Cypress.Buffer.from('/../ixtures/pictures'),
 			fileName: 'file.mp3',
@@ -270,6 +277,7 @@ describe('Student Form', () => {
 		cy.parcialAddStudent(defaultStudent);
 		cy.get('form').submit();
 
+		// Asserts
 		cy.get('tr:nth-child(8) > :nth-child(1)')
 			.contains('Picture')
 			.and('be.visible')
@@ -277,7 +285,7 @@ describe('Student Form', () => {
 			.and('have.text', 'file.mp3');
 	});
 
-	it('7/ Complete with an user born today', () => {
+	it('Complete with an user born today', () => {
 		defaultStudent.year = thisYear;
 		defaultStudent.month = thisMonth;
 		defaultStudent.day = today;
@@ -291,6 +299,7 @@ describe('Student Form', () => {
 		cy.parcialAddStudent(defaultStudent);
 		cy.get('form').submit();
 
+		// Asserts
 		cy.get('#example-modal-sizes-title-lg')
 			.contains('Thanks for submitting the form')
 			.should('be.visible');
@@ -302,7 +311,7 @@ describe('Student Form', () => {
 			.and('have.text', `${defaultStudent.day + ' ' + defaultStudent.getMonth() + ',' + defaultStudent.year}`);
 	});
 
-	it('8/ Complete with an unborn user', () => {
+	it('Complete with an unborn user', () => {
 		defaultStudent.year = farFarYear;
 		defaultStudent.month = thisMonth;
 		defaultStudent.day = today;
@@ -327,7 +336,7 @@ describe('Student Form', () => {
 			.and('have.text', `${defaultStudent.day + ' ' + defaultStudent.getMonth() + ',' + defaultStudent.year}`);
 	});
 
-	it('9/ Complete with a nonexistents first and last names (numbers) ', () => {
+	it('Complete with a nonexistents first and last names (numbers) ', () => {
 		defaultStudent.name = '1';
 		defaultStudent.lastName = '1';
 
@@ -372,9 +381,10 @@ describe('Student Form', () => {
 				.and('have.text', `${defaultStudent.phone}`);
 		});
 
+		// Close panel
 		cy.get('#closeLargeModal').click({ force: true });
 	});
-	it('10/ Check the first line herarchy of elements from the left panel ', () => {
+	it('Check the first line herarchy of elements from the left panel ', () => {
 		cy.get('.left-pannel').should('be.visible');
 
 		cy.get('.left-pannel').within(() => {
@@ -382,20 +392,6 @@ describe('Student Form', () => {
 			cy.get('.header-text')
 				.should('have.length', 6)
 				.and('have.text', 'ElementsFormsAlerts, Frame & WindowsWidgetsInteractionsBook Store Application');
-
-			//cy.get(':nth-child(1) > .group-header > .header-wrapper').should('have.text', 'Elements');
 		});
 	});
 });
-
-function returnHobbiesName(user) {
-	if (user.hobbies == '1') {
-		return 'Sports';
-	}
-	if (user.hobbies == '2') {
-		return 'Reading';
-	}
-	if (user.hobbies == '3') {
-		return 'Music';
-	}
-}

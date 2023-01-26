@@ -44,19 +44,14 @@ Cypress.Commands.add('addStudent', student => {
 
 		//Subjects
 		cy.get('#subjectsContainer').within($form => {
-			cy.get('#subjectsInput')
-				.type(student.subjects[0])
-				.tab({ force: true });
+			cy.get('#subjectsInput').type(student.subjects[0]);
+			cy.get('#react-select-2-option-0').click({ force: true });
 
-			cy.get('#subjectsInput')
-				.type(student.subjects[1])
-				.tab({ force: true });
+			cy.get('#subjectsInput').type(student.subjects[1]);
+			cy.get('#react-select-2-option-0').click({ force: true });
 
-			cy.get('#subjectsInput')
-				.type(student.subjects[2])
-				.tab({ force: true });
-
-			cy.log(`${student.subjects[0]}`);
+			cy.get('#subjectsInput').type(student.subjects[2]);
+			cy.get('#react-select-2-option-0').click({ force: true });
 
 			cy.get('.subjects-auto-complete__value-container').should('have.text', `${student.subjects[0]}` + `${student.subjects[1]}` + `${student.subjects[2]}`);
 		});
