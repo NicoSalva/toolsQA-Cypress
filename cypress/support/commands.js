@@ -1,6 +1,7 @@
 /// <reference types ="cypress" />
 
-Cypress.Commands.add('addStudent', student => {
+//this Command add only the requiere data
+Cypress.Commands.add('parcialAddStudent', student => {
 	cy.get('form').within($form => {
 		cy.get('#firstName').should('be.visible');
 		cy.get('#firstName').type(student.name);
@@ -10,29 +11,36 @@ Cypress.Commands.add('addStudent', student => {
 		cy.get('#userEmail').should('be.visible');
 		cy.get('#userEmail').type(student.email);
 
-		cy.get('[type="radio"]')
-			.first()
-			.check({ force: true });
+		cy.contains(`${student.gender}`).click({ force: true });
 
-		//Phone
-		cy.get('#userNumber').type(student.phone);
+		cy.get('#userNumber').type(student.phone); //phone
+	});
+});
+//this Command complete birthday
+Cypress.Commands.add('completeBirthday', student => {
+	cy.get('#dateOfBirthInput').click({ force: true });
 
-		cy.get('#dateOfBirthInput').click({ force: true });
+	//Month
+	cy.get('.react-datepicker__month-select')
+		.select(student.month - 1)
+		.should('have.value', `${student.month - 1}`);
 
-		//Month
-		cy.get('.react-datepicker__month-select')
-			.select('February')
-			.should('have.value', '1');
+	//Year
+	cy.get('.react-datepicker__year-select')
+		.select(`${student.year}`)
+		.should('have.value', `${student.year}`);
 
-		//Year
-		cy.get('.react-datepicker__year-select')
-			.select('1984')
-			.should('have.value', '1984');
+	//Day
+	cy.get(`${'.react-datepicker__day--0' + student.day}`)
+		.should('have.text', `${student.day}`)
+		.click({ force: true });
+});
 
-		//Day
-		cy.get('.react-datepicker__day--021')
-			.should('have.text', '21')
-			.click({ force: true });
+//this Command complete de add student
+Cypress.Commands.add('addStudent', student => {
+	cy.parcialAddStudent(student);
+	cy.get('form').within($form => {
+		cy.completeBirthday(student);
 
 		//Subjects
 		cy.get('#subjectsContainer').within($form => {
@@ -48,7 +56,9 @@ Cypress.Commands.add('addStudent', student => {
 				.type(student.subjects[2])
 				.tab({ force: true });
 
-			cy.get('.css-12jo7m5').should('have.length', student.subjects.length);
+			cy.log(`${student.subjects[0]}`);
+
+			cy.get('.subjects-auto-complete__value-container').should('have.text', `${student.subjects[0]}` + `${student.subjects[1]}` + `${student.subjects[2]}`);
 		});
 
 		//Select hobbies
@@ -62,7 +72,7 @@ Cypress.Commands.add('addStudent', student => {
 			lastModified: Date.now()
 		});
 		//Address
-		cy.get('#currentAddress').type(student.address); //add address
+		cy.get('#currentAddress').type(student.address);
 
 		//Select state
 		cy.get('#state > .css-yk16xz-control').click({ force: true });
@@ -74,6 +84,7 @@ Cypress.Commands.add('addStudent', student => {
 			}
 		});
 
+		//Select city
 		cy.get('#city >> .css-1hwfws3').click({ force: true });
 		cy.get('.css-11unzgr>').each(($e1, index, $list) => {
 			if ($e1.text() === student.city) {
@@ -84,29 +95,11 @@ Cypress.Commands.add('addStudent', student => {
 		});
 	});
 
-	cy.get('form').submit(); // Submit a form
-});
-
-Cypress.Commands.add('parcialComplete', student => {
-	cy.get('form').within($form => {
-		cy.get('#firstName').should('be.visible');
-		cy.get('#firstName').type(student.name);
-
-		cy.get('#lastName').type(student.lastName);
-
-		cy.get('#userEmail').should('be.visible');
-		cy.get('#userEmail').type(student.email);
-
-		cy.get('[type="radio"]')
-			.first()
-			.check({ force: true });
-
-		cy.get('#userNumber').type(student.phone); //phone
-	});
-
+	// Submit a form
 	cy.get('form').submit();
 });
 
+//this Command certifies this user is not submiteable
 Cypress.Commands.add('invalidSubmit', () => {
 	cy.get('#submit').should('be.visible');
 	cy.log("THE DATA IS NOT ENOUGHT OR IT'S WRONG");

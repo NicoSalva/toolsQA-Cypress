@@ -3,6 +3,12 @@ const { reporters } = require('mocha');
 
 module.exports = defineConfig({
 	reporter: 'mochawesome',
+	reporterOptions: {
+		reportDir: 'cypress/results',
+		overwrite: false,
+		html: false,
+		json: true
+	},
 	// viewportWidth: 717,
 	// viewportHeight: 916,
 	e2e: {
