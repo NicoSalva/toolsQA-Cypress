@@ -40,10 +40,8 @@ npx cypress open
 **MOCHAWESOME:**
 
 ```
-npm run cy:run:chrome -- --spec
+npm run cy:run:chrome -- --spec "cypress/e2e/formPage.cy.js"
 ```
-
-and complete command with the root path from formPage.cy.js"
 
 **Reporter Mochawesome**:
 
