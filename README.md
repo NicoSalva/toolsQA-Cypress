@@ -9,15 +9,44 @@
 
 ## Installation Guide :
 
-1. Create toolsQA-cypress folder : toolsQA\_
-2. Go to toolsQA-cypress : _cd toolsQA_
-3. git clone the repository : git clone https://github.com/NicoSalva/toolsQA-Cypress
-4. Once you have project cloned locally, goto project : _cd toolsQA-Cypress_
-5. Install all the dependencies : _npm install --legacy-peer-dps_
+1. git clone the repository :
 
-**Running Suite**:
+```
+git clone https://github.com/NicoSalva/toolsQA-Cypress
+```
 
-Manually: npx cypress open
-Mochawesome: npm run cy:run:chrome -- --spec "copy path toolsQA/toolsQA-cypress/cypress/e2e/formPage.cy.js"
+2. Once you have project cloned locally, goto project :
 
-\*\*Open reporter
+```
+cd toolsQA-Cypress
+```
+
+3. Install all the dependencies :
+
+```
+npm install --legacy-peer-dps
+```
+
+## Running Suite:
+
+**MANUALLY:**
+
+This command open Cypress tools, go to e2e and run the formPage.cy.js
+
+```
+npx cypress open
+```
+
+**MOCHAWESOME:**
+
+```
+npm run cy:run:chrome -- --spec
+```
+
+and complete command with the root path from formPage.cy.js"
+
+**Reporter Mochawesome**:
+
+play the .mp4 from videos folder
+
+Open mochawesome.html from result folder

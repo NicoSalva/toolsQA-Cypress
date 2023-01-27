@@ -1,21 +1,42 @@
 /// <reference types ="cypress" />
 
+//this Command complete email
+Cypress.Commands.add('completeEmail', email => {
+	cy.get('#userEmail').clear();
+	cy.get('#userEmail').should('be.visible');
+	cy.get('#userEmail').type(email);
+});
+
+//this Command complete phone number
+Cypress.Commands.add('completePhoneNumber', phone => {
+	cy.get('#userNumber').clear();
+	cy.get('#userNumber').should('be.visible');
+	cy.get('#userNumber').type(phone);
+});
+
+//this Command complete first and last names
+Cypress.Commands.add('completeFirstAndLastNames', student => {
+	cy.get('#firstName').clear();
+	cy.get('#firstName').should('be.visible');
+	cy.get('#firstName').type(student.name);
+
+	cy.get('#lastName').clear();
+	cy.get('#lastName').should('be.visible');
+	cy.get('#lastName').type(student.lastName);
+});
+
 //this Command add only the requiere data
 Cypress.Commands.add('parcialAddStudent', student => {
 	cy.get('form').within($form => {
-		cy.get('#firstName').should('be.visible');
-		cy.get('#firstName').type(student.name);
-
-		cy.get('#lastName').type(student.lastName);
-
-		cy.get('#userEmail').should('be.visible');
-		cy.get('#userEmail').type(student.email);
+		cy.completeFirstAndLastNames(student);
+		cy.completeEmail(student.email);
 
 		cy.contains(`${student.gender}`).click({ force: true });
 
-		cy.get('#userNumber').type(student.phone); //phone
+		cy.completePhoneNumber(student.phone); //phone
 	});
 });
+
 //this Command complete birthday
 Cypress.Commands.add('completeBirthday', student => {
 	cy.get('#dateOfBirthInput').click({ force: true });
@@ -37,7 +58,7 @@ Cypress.Commands.add('completeBirthday', student => {
 });
 
 //this Command complete de add student
-Cypress.Commands.add('addStudent', student => {
+Cypress.Commands.add('fullStudent', student => {
 	cy.parcialAddStudent(student);
 	cy.get('form').within($form => {
 		cy.completeBirthday(student);

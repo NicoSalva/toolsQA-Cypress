@@ -16,7 +16,7 @@ describe('Student Form', () => {
 	});
 
 	it('Complete form with all the information', () => {
-		cy.addStudent(defaultStudent);
+		cy.fullStudent(defaultStudent);
 
 		// Asserts
 		cy.get('#example-modal-sizes-title-lg')
@@ -124,7 +124,7 @@ describe('Student Form', () => {
 		// Submit a form
 		cy.get('form').submit();
 
-		// Aasserts
+		// Asserts
 		cy.get('#example-modal-sizes-title-lg')
 			.contains('Thanks for submitting the form')
 			.should('be.visible');
@@ -169,50 +169,40 @@ describe('Student Form', () => {
 
 	it('Complete with a nonexistent e-mail and validate the real email structure', () => {
 		cy.get('form').within($form => {
-			// First name
-			cy.get('#firstName').type(defaultStudent.name);
-
-			// Last name
-			cy.get('#lastName').type(defaultStudent.lastName);
+			//Name
+			cy.completeFirstAndLastNames(defaultStudent);
 
 			// Gender
-			cy.get('[type="radio"]')
-				.first()
-				.check({ force: true });
+			cy.contains(`${defaultStudent.gender}`).click({ force: true });
 
 			// Phone
-			cy.get('#userNumber')
-				.click()
-				.type(defaultStudent.phone);
+			cy.completePhoneNumber(defaultStudent.phone);
 
 			// Complete e-mail with 'aaaa' without @ and .com
-			cy.get('#userEmail').should('be.visible');
-			cy.get('#userEmail').type('aaaa');
+			cy.completeEmail('aaaa');
 		});
+
+		//assert invalid Submit
 		cy.invalidSubmit();
 
 		cy.get('#userEmail').should('be.visible');
 
 		// Complete mail with '1111' (without name and .com)
-		cy.get('#userEmail')
-			.clear()
-			.type('111');
+		cy.completeEmail('111');
 
 		cy.invalidSubmit();
+
 		cy.get('#userEmail').should('be.visible');
 
-		cy.get('#userEmail').clear();
-
 		// Complete e-mail with @a.com (without name)
-		cy.get('#userEmail').type('@a.com');
+		cy.completeEmail('@a.com');
 
 		cy.invalidSubmit();
-		/// Complete e-mail with a@a.com (correct)
-		cy.get('#userEmail')
-			.clear()
-			.type('a@a.com');
 
-		// Submit
+		/// Complete e-mail with a@a.com (correct)
+		cy.completeEmail('a@a.com');
+
+		// Submit OK
 		cy.get('form').submit();
 
 		cy.get('#example-modal-sizes-title-lg')
@@ -226,35 +216,25 @@ describe('Student Form', () => {
 	it('Complete form with a invalid Phone Number and validate the real structure', () => {
 		cy.get('form').within($form => {
 			// First name
-			cy.get('#firstName')
-				.click({ force: true })
-				.type(defaultStudent.name);
-			// Last name
-			cy.get('#lastName').type(defaultStudent.lastName);
+			cy.completeFirstAndLastNames(defaultStudent);
 			// Gender
-			cy.get('[type="radio"]')
-				.first()
-				.check({ force: true });
+			cy.contains(`${defaultStudent.gender}`).click({ force: true });
 			// Phone
-			cy.get('#userEmail').type(defaultStudent.email);
+			cy.completeEmail(defaultStudent.email);
 
 			// Complete phone with less of 10 numbers
-			cy.get('#userNumber').should('be.visible');
-			cy.get('#userNumber').type('123456789');
+			cy.completePhoneNumber('123456789');
 		});
 		cy.invalidSubmit();
-		cy.get('#userNumber').clear();
 
 		// Complete phone with chars
-		cy.get('#userNumber').should('be.visible');
-		cy.get('#userNumber').type('aaaaaaaaaa');
+		cy.completePhoneNumber('aaaaaaaaaa');
 
 		cy.invalidSubmit();
 		cy.get('#userNumber').clear();
 
 		// Complete phone with 10 numbers
-		cy.get('#userNumber').should('be.visible');
-		cy.get('#userNumber').type(defaultStudent.phone);
+		cy.completePhoneNumber(defaultStudent.phone);
 
 		cy.get('form').submit();
 
